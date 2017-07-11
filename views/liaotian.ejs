@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <title>Document</title>
+  <style>
+  * {
+    padding:0;
+    margin:0;
+    box-sizing: border-box;
+  }
+  body {
+    width:100%;
+    height:100%;
+    /*background: url("http://i4.piimg.com/1949/c1f8b823041cfaa7.jpg");*/
+  }
+  .haha {
+    width:100%;
+    height:100%;
+    position: absolute;
+    bottom:0px;
+  }
+  .head {
+    width:100%;
+    height:10%;
+    padding:0px;
+    margin:0px;
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    line-height: 50px;
+    background: rgb(217,83,79);
+    box-shadow: 0 0 10px #fff;
+
+  }
+  .head span {
+    font-size: 15px;
+    position: absolute;
+    left:3px;
+    top:10px;
+    color:#00ec00;
+  }
+  #kuang {
+    width:100%;
+    height:82%;
+    /*overflow: auto;*/
+    background: url("http://i1.buimg.com/1949/fa704d26b86724f0.jpg") no-repeat;
+    background-size: 100%;
+    /*border:1px solid red;*/
+    margin:auto;
+    position:relative;
+    font: 13px Helvetica, Arial;
+  }
+  form {
+    width:100%;
+    height:8%;
+    padding:3px;
+    background: green;
+    position:fixed;
+    bottom:0;
+    padding:3px;
+    margin-right: .5%;
+  }
+  #input {
+    width:80%;
+    height:100%;
+    padding:10px;
+    border:1px solid green;
+    outline-style:none;
+  }
+  form button {
+     width: 20%;
+     height:7%;
+     /*background: rgb(130, 224, 255);*/
+     border: none;
+     padding: 10px;
+     position: fixed;
+     right:1px;
+     bottom:4px;
+  }
+  #mation {
+    width:100%;
+    height:100%;
+    overflow: auto;  /*隐藏横向滚动条*/
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  #mation li {
+    width:60%;
+    position: relative;
+    word-break: break-all;
+    border-bottom: 1px solid #eee;
+    padding: 10px 10px;
+    list-style: none;
+    margin: 5px;
+  }
+  #mation li:nth-child(odd) {
+    background: #eee;
+  }
+  h1 {
+    color:red;
+  }
+  #mation li span {
+    width:15px;
+    height:15px;
+    border-radius: 50%;
+    background: #fff;
+    font-size: 14px;
+    color:#00ec00;
+    display: block;
+    position:absolute;
+    left:-25px;
+    top:35%;
+  }
+  p {
+    display: inline;
+  }
+  #mation .myself {
+    margin-left: 40%;
+  }
+  </style>
+</head>
+<body>
+<div class="haha">
+  <h2 class="head"><span></span>聊天室<a href="/" class="glyphicon glyphicon-home"></a></h2>
+  <div id="kuang">
+    <ul id="mation" class="list-group"></ul>
+  </div>
+  <form action="">
+    <input type="text" id="input" class="form-control" autocomplete="off">
+    <button class="btn btn-danger">发送</button>
+  </form>
+
+  </div>
+  <script src="https://cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>
+  <script src="http://cdn.bootcss.com/socket.io/1.5.1/socket.io.min.js" charset="utf-8"></script>
+  <script type="text/javascript">
+    // var mation = document.querySelector("#mation");
+    var socket = io();
+      $("form").submit(function(){
+        socket.emit("in server",$("#input").val());
+        $("#input").val("");
+        return false;
+      });
+
+      socket.on("na",function(na){
+        $(".head span").text(na);
+      });
+      socket.on("in web",function(nameleft,data){
+        $("#mation").append("<li class='well-lg well'></li>");
+        $("li:last").css("background","rgba(255,0,255,0.5)");
+        socket.on("color",function(){
+          $("li:last").css("background","rgba(255,255,0,0.5)");
+        });
+
+        socket.on("class",function(){
+          $("li:last").addClass("myself");
+        });
+
+       $("li:last").append("<span></span>");
+        socket.on("li",function(){
+          $("li:last span").addClass("glyphicon glyphicon-ok");
+        });
+        $("li:last").prepend($("<p>").text(data));
+        $("li:last").prepend($("<i>").text(nameleft + " : ").css({"color":"blue","font-weight":"bold"}));
+        // $("li:eq(1) span").remove();
+        $("#mation").scrollTop(9999);
+      });
+      socket.on("guangbo",function(name){
+        $("#mation").append($("<h1>欢迎" + name + "进入聊天室!</h1>"))
+      });
+
+  </script>
+</body>
+</html>
