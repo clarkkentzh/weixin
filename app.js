@@ -6,6 +6,8 @@ var mongo = require("mongodb").MongoClient;
 var fs = require("fs");
 var bodypa = require("body-parser");
 var assert = require("assert");
+var input2 = require("./routes/input2");
+var input1 = require("./routes/input1");
 
 app.use(bodypa.json({limit: '1mb'}));
 app.use(bodypa.urlencoded({
@@ -102,13 +104,14 @@ app.post("/success",function(req,res){
   }
 });
 
-app.get("/pass",function(req,res){
-  res.render("input2");
-})
-
-app.get("/use",function(req,res){
-  res.render("input1");
-});
+// app.get("/pass",function(req,res){
+//   res.render("input2");
+// })
+app.use("/pass",input2);
+app.use("/use",input1);
+// app.get("/use",function(req,res){
+//   res.render("input1");
+// });
 
 // app.get("/liaotian",function(req,res){
 //   res.render("liaotian");
@@ -128,6 +131,7 @@ io.on("connection",function(socket){
 });
 
 // app.listen(2500);
-http.listen(3000,function(){
-  console.log("listening 3000!");
+http.listen(2500,function(){
+  console.log("listening 2500!");
 });
+module.exports = app;
